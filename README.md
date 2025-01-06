@@ -1,5 +1,14 @@
-# BRUH
-![Figure_1](https://github.com/user-attachments/assets/121bec23-ac10-4d84-8ee2-31499fa3811d)
+# VS2F2D
+**V**ery **S**imple **F**unction **F**it **to** **D**ata
+
+<img src="https://github.com/user-attachments/assets/121bec23-ac10-4d84-8ee2-31499fa3811d" height="300">
+
+## Features
+- Fit functions 
+  - linear
+  - quadratic
+  - exponencial
+
 ## How to run
 Create and activate python environment 
 ```console
