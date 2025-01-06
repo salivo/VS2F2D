@@ -14,3 +14,7 @@ Run
 ```console
 python fit_function.py
 ```
+Example with arguments
+```console
+python fit_function.py -F LED_2.csv -x V -y mA -f exponential
+```
