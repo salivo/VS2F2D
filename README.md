@@ -1,8 +1,10 @@
 # BRUH
+
 ## How to run
 Create python `env`
 ```console
 python -m venv env
+. env/bin/activate
 ```
 Install all requirements
 ```console
