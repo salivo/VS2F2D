@@ -1,7 +1,7 @@
 # BRUH
 
 ## How to run
-Create python `env`
+Create and activate python environment 
 ```console
 python -m venv env
 . env/bin/activate
