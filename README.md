@@ -4,11 +4,11 @@ Create python `env`
 ```console
 python -m venv env
 ```
-Install all requriments
+Install all requirements
 ```console
-pip install -r requriments.txt
+pip install -r requirements.txt
 ```
-Run 
+Run
 ```console
 python fit_function.py
 ```
