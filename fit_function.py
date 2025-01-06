@@ -14,14 +14,17 @@ def quadratic(x, a, b, c):
 def exponential(x, a, b, c):
     return a * np.exp(b * x) + c
 
+def root(x, a, b, c):
+    return a * np.sqrt(b * x) + c
+
 def main():
     # Argument parser setup
     parser = argparse.ArgumentParser(description="Fit a function to data and generate plots.")
     parser.add_argument("-F", "--file", required=True, help="Path to the CSV file.")
     parser.add_argument("-x", "--xaxis", required=True, help="Name of the column for the x-axis.")
     parser.add_argument("-y", "--yaxis", required=True, help="Name of the column for the y-axis.")
-    parser.add_argument("-f", "--function", required=True, choices=["linear", "quadratic", "exponential"],
-                        help="Type of function to fit: linear, quadratic, or exponential.")
+    parser.add_argument("-f", "--function", required=True, choices=["linear", "quadratic", "exponential", "root"],
+                        help="Type of function to fit: linear, quadratic, exponential, or root.")
     args = parser.parse_args()
 
     # Load the data
@@ -42,6 +45,9 @@ def main():
     elif args.function == "exponential":
         func = exponential
         p0 = [1, 1, 1]  # Initial guess for exponential
+    elif args.function == "root":
+        func = root
+        p0 = [1, 1, 1]  # Initial guess for root
 
     # Fit the curve
     popt, pcov = curve_fit(func, x_data, y_data, p0=p0)

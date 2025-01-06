@@ -9,10 +9,11 @@
 - Fit functions
   - linear
   - quadratic
+  - root
   - exponencial
 
 ## How to run
-Create and activate python environment 
+Create and activate python environment
 ```console
 python -m venv env
 . env/bin/activate
