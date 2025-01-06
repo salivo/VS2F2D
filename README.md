@@ -1,5 +1,5 @@
 # BRUH
-
+![Figure_1](https://github.com/user-attachments/assets/121bec23-ac10-4d84-8ee2-31499fa3811d)
 ## How to run
 Create and activate python environment 
 ```console
