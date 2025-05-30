@@ -13,7 +13,7 @@
   - exponencial
   - reciprocal
   - logarithmic
-- Plot function as dots to `.csv'
+- Plot function as dots to `.csv`
 - Print fitted function expression
 
 ## How to run
