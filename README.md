@@ -11,6 +11,8 @@
   - quadratic
   - root
   - exponencial
+  - reciprocal
+  - logarithmic
 
 ## How to run
 Create and activate python environment
