@@ -17,14 +17,43 @@ def exponential(x, a, b, c):
 def root(x, a, b, c):
     return a * np.sqrt(b * x) + c
 
+def reciprocal(x, a, b, c):
+    return a / (x + b) + c
+
+def logarithmic(x, a, b):
+    return a * np.log(x) + b
+
+def print_function_string(func_name, params):
+    if func_name == "linear":
+        a, b = params
+        print(f"Fitted function: {a:.4g}x + {b:.4g}")
+    elif func_name == "quadratic":
+        a, b, c = params
+        print(f"Fitted function: {a:.4g}x^2 + {b:.4g}x + {c:.4g}")
+    elif func_name == "exponential":
+        a, b, c = params
+        print(f"Fitted function: {a:.4g} * exp({b:.4g}x) + {c:.4g}")
+    elif func_name == "root":
+        a, b, c = params
+        print(f"Fitted function: {a:.4g} * sqrt({b:.4g}x) + {c:.4g}")
+    elif func_name == "reciprocal":
+        a, b, c = params
+        print(f"Fitted function: {a:.4g} / (x + {b:.4g}) + {c:.4g}")
+    elif func_name == "logarithmic":
+        a, b = params
+        print(f"Fitted function: {a:.4g} * ln(x) + {b:.4g}")
+    else:
+        print("Function is not implemented")
+
 def main():
     # Argument parser setup
     parser = argparse.ArgumentParser(description="Fit a function to data and generate plots.")
     parser.add_argument("-F", "--file", required=True, help="Path to the CSV file.")
     parser.add_argument("-x", "--xaxis", required=True, help="Name of the column for the x-axis.")
     parser.add_argument("-y", "--yaxis", required=True, help="Name of the column for the y-axis.")
-    parser.add_argument("-f", "--function", required=True, choices=["linear", "quadratic", "exponential", "root"],
-                        help="Type of function to fit: linear, quadratic, exponential, or root.")
+    parser.add_argument("-f", "--function", required=True,
+                        choices=["linear", "quadratic", "exponential", "root", "reciprocal", "logarithmic"],
+                        help="Type of function to fit.")
     args = parser.parse_args()
 
     # Load the data
@@ -34,23 +63,33 @@ def main():
 
     x_data = data[args.xaxis]
     y_data = data[args.yaxis]
-
+    func = linear
+    p0 = []
     # Select the fitting function
     if args.function == "linear":
         func = linear
-        p0 = [1, 1]  # Initial guess for linear
+        p0 = [1, 1]
     elif args.function == "quadratic":
         func = quadratic
-        p0 = [1, 1, 1]  # Initial guess for quadratic
+        p0 = [1, 1, 1]
     elif args.function == "exponential":
         func = exponential
-        p0 = [1, 1, 1]  # Initial guess for exponential
+        p0 = [1, -0.01, 1]
     elif args.function == "root":
         func = root
-        p0 = [1, 1, 1]  # Initial guess for root
+        p0 = [1, 1, 1]
+    elif args.function == "reciprocal":
+        func = reciprocal
+        p0 = [1, 1, 1]
+    elif args.function == "logarithmic":
+        func = logarithmic
+        p0 = [1, 1]
 
     # Fit the curve
     popt, pcov = curve_fit(func, x_data, y_data, p0=p0)
+
+    # Print fitted function
+    print_function_string(args.function, popt)
 
     # Generate fitted values
     x_fit = np.linspace(x_data.min(), x_data.max(), 500)
