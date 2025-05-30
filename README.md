@@ -13,6 +13,8 @@
   - exponencial
   - reciprocal
   - logarithmic
+- Plot function as dots to `.csv'
+- Print fitted function expression
 
 ## How to run
 Create and activate python environment
