@@ -23,6 +23,8 @@ def reciprocal(x, a, b, c):
 def logarithmic(x, a, b):
     return a * np.log(x) + b
 
+def sine(x, a, b, c, d):
+    return a * np.sin(b * x + c) + d
 def print_function_string(func_name, params):
     if func_name == "linear":
         a, b = params
@@ -42,48 +44,54 @@ def print_function_string(func_name, params):
     elif func_name == "logarithmic":
         a, b = params
         print(f"Fitted function: {a:.4g} * ln(x) + {b:.4g}")
+    elif func_name == "sine":
+        a, b, c, d = params
+        print(f"Fitted function: {a:.4g} * sin({b:.4g}x + {c:.4g}) + {d:.4g}")
     else:
         print("Function is not implemented")
 
+def guess_sinusoidal_params(x, y):
+    a_guess = (np.max(y) - np.min(y)) / 2
+    y_detrended = y - np.mean(y)
+    fft_freq = np.fft.fftfreq(len(x), d=(x[1] - x[0]))
+    fft_magnitude = np.abs(np.fft.fft(y_detrended))
+    peak_index = np.argmax(fft_magnitude[1:]) + 1
+    freq_guess = 2 * np.pi * np.abs(fft_freq[peak_index])
+    c_guess = 0
+    d_guess = np.mean(y)
+    return [a_guess, freq_guess, c_guess, d_guess]
+
 def main():
-    # Argument parser setup
     parser = argparse.ArgumentParser(description="Fit a function to data and generate plots.")
     parser.add_argument("-F", "--file", required=True, help="Path to the CSV file.")
     parser.add_argument("-x", "--xaxis", required=True, help="Name of the column for the x-axis.")
     parser.add_argument("-y", "--yaxis", required=True, help="Name of the column for the y-axis.")
     parser.add_argument("-f", "--function", required=True,
-                        choices=["linear", "quadratic", "exponential", "root", "reciprocal", "logarithmic"],
+                        choices=["linear", "quadratic", "exponential", "root", "reciprocal", "logarithmic", "sine"],
                         help="Type of function to fit.")
+    parser.add_argument("--delimiter", default=';', help="CSV delimiter (default: ';')")
+    parser.add_argument("--decimal", default=',', help="Decimal separator (default: ',')")
     args = parser.parse_args()
 
-    # Load the data
-    data = pd.read_csv(args.file)
+    data = pd.read_csv(args.file, delimiter=args.delimiter, decimal=args.decimal)
     if args.xaxis not in data.columns or args.yaxis not in data.columns:
         raise ValueError(f"Specified columns '{args.xaxis}' or '{args.yaxis}' not found in the file.")
 
     x_data = data[args.xaxis]
     y_data = data[args.yaxis]
-    func = linear
-    p0 = []
-    # Select the fitting function
-    if args.function == "linear":
-        func = linear
-        p0 = [1, 1]
-    elif args.function == "quadratic":
-        func = quadratic
-        p0 = [1, 1, 1]
-    elif args.function == "exponential":
-        func = exponential
-        p0 = [1, -0.01, 1]
-    elif args.function == "root":
-        func = root
-        p0 = [1, 1, 1]
-    elif args.function == "reciprocal":
-        func = reciprocal
-        p0 = [1, 1, 1]
-    elif args.function == "logarithmic":
-        func = logarithmic
-        p0 = [1, 1]
+
+    # Select fitting function
+    func_map = {
+        "linear": (linear, [1, 1]),
+        "quadratic": (quadratic, [1, 1, 1]),
+        "exponential": (exponential, [1, -0.01, 1]),
+        "root": (root, [1, 1, 1]),
+        "reciprocal": (reciprocal, [1, 1, 1]),
+        "logarithmic": (logarithmic, [1, 1]),
+        "sine": (sine, guess_sinusoidal_params(x_data.to_numpy(), y_data.to_numpy()))
+    }
+
+    func, p0 = func_map[args.function]
 
     # Fit the curve
     popt, pcov = curve_fit(func, x_data, y_data, p0=p0)
@@ -95,10 +103,10 @@ def main():
     x_fit = np.linspace(x_data.min(), x_data.max(), 500)
     y_fit = func(x_fit, *popt)
 
-    # Save the fitted data for LaTeX
+    # Save fitted data
     fitted_data = pd.DataFrame({args.xaxis: x_fit, args.yaxis: y_fit})
     fitted_file = "fitted_curve.csv"
-    fitted_data.to_csv(fitted_file, index=False)
+    fitted_data.to_csv(fitted_file, index=False, sep=args.delimiter, decimal=args.decimal)
     print(f"Fitted data saved to: {fitted_file}")
 
     # Plot the original data and fitted curve

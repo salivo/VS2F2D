@@ -13,7 +13,9 @@
   - exponencial
   - reciprocal
   - logarithmic
+  - sine
 - Plot function as dots to `.csv`
+- Set delimiter and decimal chars
 - Print fitted function expression
 
 ## How to run
