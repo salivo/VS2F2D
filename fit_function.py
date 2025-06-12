@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
+import os
 
 # Define fitting functions
 def linear(x, a, b):
@@ -105,7 +106,7 @@ def main():
 
     # Save fitted data
     fitted_data = pd.DataFrame({args.xaxis: x_fit, args.yaxis: y_fit})
-    fitted_file = "fitted_curve.csv"
+    fitted_file = f"{os.path.splitext(args.file)[0]}_fitted.csv"
     fitted_data.to_csv(fitted_file, index=False, sep=args.delimiter, decimal=args.decimal)
     print(f"Fitted data saved to: {fitted_file}")
 

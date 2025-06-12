@@ -17,7 +17,7 @@
 - Plot function as dots to `.csv`
 - Set delimiter and decimal chars
 - Print fitted function expression
-
+- Cut data with ui (`trim.py`)
 ## How to run
 Create and activate python environment
 ```console
